@@ -1,6 +1,5 @@
 import Shell from 'gi://Shell';
-
-const LAST_WORKSPACE_INDEX = 9;
+import Config from './config.js';
 
 export default class Window {
   static appSystem = Shell.AppSystem.get_default();
@@ -41,7 +40,8 @@ export default class Window {
   }
 
   constructor(gnome_window) {
-    this.instance = gnome_window
+    this.instance = gnome_window;
+    this.config = new Config().parse();
   }
 
   arrange(windowWidth, windowHeight) {
@@ -81,8 +81,12 @@ export default class Window {
   }
 
   hide() {
-    // this.instance.minimize();
-    this.instance.change_workspace_by_index(LAST_WORKSPACE_INDEX, false)
+    if (this.config?.mode == "last_workspace") {
+      const last_workspace_index = global.workspace_manager.get_n_workspaces() - 1;
+      this.instance.change_workspace_by_index(last_workspace_index, false);
+    } else {  // default behavior
+      this.instance.minimize();
+    }
   }
 
   focused() {
