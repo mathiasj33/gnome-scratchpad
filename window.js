@@ -1,9 +1,11 @@
 import Shell from 'gi://Shell';
 
+const LAST_WORKSPACE_INDEX = 9;
+
 export default class Window {
   static appSystem = Shell.AppSystem.get_default();
 
-  static find({title, wmclass}) {
+  static find({ title, wmclass }) {
     let windows = [];
 
     // Find the Gnome window instance
@@ -79,7 +81,8 @@ export default class Window {
   }
 
   hide() {
-    this.instance.minimize();
+    // this.instance.minimize();
+    this.instance.change_workspace_by_index(LAST_WORKSPACE_INDEX, false)
   }
 
   focused() {
